@@ -2,12 +2,7 @@
 import { ref, onMounted, watch } from 'vue';
 import { browser } from 'wxt/browser';
 
-defineProps({
-  msg: String,
-});
-
 // State management
-const count = ref(0);
 const pageContent = ref('');
 const pageTitle = ref('');
 const isLoading = ref(false);
@@ -26,12 +21,6 @@ let speechUtterance = null;
 
 // Load saved values
 onMounted(async () => {
-  // Load saved count
-  const savedCount = localStorage.getItem('wxt-count');
-  if (savedCount !== null) {
-    count.value = parseInt(savedCount, 10);
-  }
-  
   // Load saved speech settings
   const savedRate = localStorage.getItem('wxt-speech-rate');
   if (savedRate !== null) {
@@ -50,11 +39,6 @@ onMounted(async () => {
   
   // Initialize speech synthesis
   initSpeechSynthesis();
-});
-
-// Watch for changes to count and save to localStorage
-watch(count, (newValue) => {
-  localStorage.setItem('wxt-count', newValue.toString());
 });
 
 // Watch for changes to speech settings
@@ -301,15 +285,10 @@ const prevSegment = () => {
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
-
-  <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
     <button type="button" @click="getPageContent" :disabled="isLoading">
       {{ isLoading ? 'Loading...' : 'Extract Content' }}
     </button>
-  </div>
-  
+
   <div v-if="error" class="error">
     {{ error }}
   </div>
